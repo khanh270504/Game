@@ -80,33 +80,37 @@ public class GameManager {
 		}
 	}
 
-	public int CheckHorseCanMove(Horse _horse) {
-		int canMove = 1;
-		for (int i = 0; i < HorseOnBoard.size(); i++) {
-			if (HorseOnBoard.get(i).PositionIndex > _horse.PositionIndex) {
-				if (HorseOnBoard.get(i).PositionIndex < _horse.PositionIndex + dice.diceValue) {
-					System.out.println("Không thể di chuyển!!!");
-					return -1;
-				}
-				if (HorseOnBoard.get(i).PositionIndex == _horse.PositionIndex + dice.diceValue) {
-					if (HorseOnBoard.get(i) == _horse || HorseOnBoard.get(i).team == _horse.team) {
-						return -1;
-					} else {
-						canMove = 2;
-					}
-				}
-			}
-			if (_horse.StepCount == 55) {
-				return 1;
-			}
+	 public int CheckHorseCanMove(Horse _horse){
+        int canMove = 1;
+        for (int i = 0; i < HorseOnBoard.size(); i++){
+            if (HorseOnBoard.get(i).PositionIndex != _horse.PositionIndex) {
+                if ((Horse.IndexAfterMove(_horse, dice.diceValue) - HorseOnBoard.get(i).PositionIndex) > 0 &&
+                (Horse.IndexAfterMove(_horse, dice.diceValue) - HorseOnBoard.get(i).PositionIndex) <= 6){
+                    return -1;
+                }
+                if (HorseOnBoard.get(i).PositionIndex == Horse.IndexAfterMove(_horse, dice.diceValue)){
 
-			if (_horse.StepCount + dice.diceValue > 55 && !_horse.isOnStable) {
-				return -1;
-			}
+                    if (HorseOnBoard.get(i) == _horse || HorseOnBoard.get(i).team == _horse.team){
+                        return -1;
+                    }
+                    else{
+                        canMove = 2;
+                    }
+                }
+            }
 
-		}
-		return canMove;
-	}
+            if (_horse.StepCount == 55){
+                return 1;
+            }
+
+            if (_horse.StepCount + dice.diceValue > 55 && !_horse.isOnStable){
+                return -1;
+            }
+
+        }
+        return canMove;
+    }
+
 
 	public void KillHorse(int horsePosIndex) {
 		for (int i = 0; i < HorseOnBoard.size(); i++) {
