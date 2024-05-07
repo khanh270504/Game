@@ -12,10 +12,11 @@ public class Horse extends JButton{
     public int id;
     public vector2 Position;
     public int PositionIndex;
-
+    
     public int StepCount = 0;
     public boolean isOnStable = false;
-
+    public boolean isWin = false;
+    public int countHorse = 0;
     public boolean isOnBoard = false;
 
     public Horse(String imageURL, int _team, int _id){
@@ -29,6 +30,7 @@ public class Horse extends JButton{
         Image scaledImage = image.getScaledInstance(GameLoader.HorseSize, GameLoader.HorseSize, Image.SCALE_SMOOTH);
         setIcon(new ImageIcon(scaledImage));
 
+        
         setBorderPainted(false);
         setFocusPainted(false);
         setContentAreaFilled(false);
@@ -56,12 +58,14 @@ public class Horse extends JButton{
 
     public void Move(int step){
         if (StepCount >= 55){
-            if (step == 6){
-                GoHome();
-                GameManager.instance.getCurrentPlayer().horseList.remove(this);
-                Game.gamePanel.remove(this);
-                return;
-            }
+        	if (step == 6) {
+        	   GoHome();
+        	   Game.gamePanel.remove(this);
+        	    GameManager.instance.RemoveHorse(id);
+        	    System.out.println(GameManager.instance.PlayerList[GameManager.currentPlayer].horseList.size());
+        	    isWin = true;
+        	    return;
+        	}
 
             isOnStable = true;
             StepCount += step;
@@ -75,6 +79,7 @@ public class Horse extends JButton{
             PositionIndex += step;
 
             if (PositionIndex > 55){
+             //   System.out.println("hello");
                 PositionIndex -= 56;
             }
 
@@ -101,4 +106,11 @@ public class Horse extends JButton{
         setPosition(new vector2(GameLoader.PlayerOriginPos[team].x + GameLoader.HorseBaseOffset[id].x * GameLoader.HorseSize, GameLoader.PlayerOriginPos[team].y + GameLoader.HorseBaseOffset[id].y * GameLoader.HorseSize));
     }
 
+    public static int IndexAfterMove(Horse _horse, int step){
+        int indexAferterMove = _horse.PositionIndex + step;
+        if (indexAferterMove > 55){
+            return indexAferterMove - 56;
+        }
+        return indexAferterMove;
+    }   
 }
