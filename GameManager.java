@@ -167,7 +167,7 @@ public class GameManager {
 
 	private void Next() {
 		currentPlayer += 1;
-
+        if (dice.diceValue == 6) currentPlayer -= 1;
 		dice.diceValue = 0;
 //		if (currentPlayer == 4) {
 //			currentPlayer = 0;
@@ -177,7 +177,7 @@ public class GameManager {
 
 	}
 
-	public Player getCurrentPlayer() {
-		return PlayerList[currentPlayer];
-	}
+   public void RemoveHorse(int id) {
+        PlayerList[currentPlayer].horseList.remove(id);
+    }
 }
